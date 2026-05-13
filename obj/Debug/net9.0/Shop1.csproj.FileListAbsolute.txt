@@ -141,3 +141,4 @@ D:\.NET c#\Shop1\Shop1\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenId
 D:\.NET c#\Shop1\Shop1\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
 D:\.NET c#\Shop1\Shop1\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
 D:\.NET c#\Shop1\Shop1\bin\Debug\net9.0\BCrypt-Net-Next.dll
+D:\.NET c#\Shop1\Shop1\obj\Debug\net9.0\Shop1.sourcelink.json

@@ -1,13 +1,20 @@
-﻿using Microsoft.AspNetCore.Identity.Data;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens.Experimental;
+using Shop1.DTO;
 using ShopApi.Data;
 using ShopApi.Models;
 using ShopApi.Services;
-using Shop1.DTO;
+using System.Security.Claims;
+
 namespace Shop1.Controllers
 {
-    public class AuthController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AuthController : ControllerBase
     {
         private readonly ShopDbContext _shopDbContext;
         private readonly TokenService _tokenService;
@@ -17,7 +24,7 @@ namespace Shop1.Controllers
         {
             this._shopDbContext = shopDbContext;
             _tokenService = tokenService;
-            _passwordService= passwordService;
+            _passwordService = passwordService;
         }
 
         //Viết 1 cái until để hash password dùng bcrypt 
@@ -70,7 +77,7 @@ namespace Shop1.Controllers
             var accessToken = _tokenService.GenerateAccessToken(user);
 
             // tạo refresh token
-            var refreshToken = _tokenService.GenerateRefreshToken();
+            var refreshToken = _tokenService.GenerateRefreshToken(user);
 
             return Ok(new
             {
@@ -80,6 +87,44 @@ namespace Shop1.Controllers
                 refreshToken
             });
         }
-    }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDTO DTO)
+        {
+            var user = await _shopDbContext.Users.FirstOrDefaultAsync(x =>x.Email == DTO.Email);
+            if(user == null)
+            {
+                return NotFound(new
+                {
+
+                    Message="NotFound User"
+                });
+            }
+            var PassWordValidate = _passwordService.VerifyPassword(DTO.Password, user.Password);
+            if(PassWordValidate == false)
+            {
+                throw new BadHttpRequestException("Wrong PassWord");
+            }
+            //tạo acc
+            var accessToken = _tokenService.GenerateAccessToken(user);
+            //tạo re
+            var refreshToken = _tokenService.GenerateRefreshToken(user);
+            return Ok(new
+            {
+                message = "Login success",
+                user,
+                accessToken,
+                refreshToken
+            });
+        }
+
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<IActionResult> GetUser()
+        {
+            var UserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _shopDbContext.Users.FirstOrDefaultAsync(x=>x.Id == int.Parse(UserId));
+            return Ok(user);
+        }
+    } 
 }
 
