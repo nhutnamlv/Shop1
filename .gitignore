@@ -1,0 +1,42 @@
+﻿# Build
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ASP.NET secrets
+appsettings.Development.json
+
+# NuGet
+*.nupkg
+
+# Publish
+publish/
+
+# Entity Framework
+Migrations/*.Designer.cs
+
+# Node
+node_modules/
+
+# wwwroot upload
+wwwroot/uploads/
+
+# dotenv
+.env
