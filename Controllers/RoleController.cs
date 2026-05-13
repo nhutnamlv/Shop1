@@ -20,6 +20,7 @@ namespace Shop1.Controllers
         public async Task<IActionResult> CreateRole([FromBody] RequestRoleDTO request)
         {
             //check role tồn tại
+            //check
             var RoleExist = await _shopDbContext.Roles
                 .AnyAsync(x => x.Name == request.Name);
             if (RoleExist)
