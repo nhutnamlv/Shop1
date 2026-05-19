@@ -92,7 +92,6 @@ namespace Shop1.Controllers
             role.Name = request.Name;
             role.UpdatedAt = DateTime.UtcNow;
             role.UpdatedBy = "system";
-            _shopDbContext.Roles.Update(role);// chỗ này chat kêu kh cần 
             await _shopDbContext.SaveChangesAsync();
             return Ok(new
             {
