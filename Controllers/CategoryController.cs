@@ -45,14 +45,14 @@ namespace Shop1.Controllers
                 data = category,
             });
         }
-        [HttpGet("get-all")]
-        public async Task<IActionResult> GetallCategory()
+        [HttpGet]
+        public async Task<IActionResult> getAll()
         {
-            var categorys = await _shopDbContext.Categories.ToListAsync();
+            var categories = await _shopDbContext.Categories.ToListAsync();
             return Ok(new
             {
                 message = "Get all category sucsessfully",
-                data = categorys
+                data = categories
             });
         }
         [HttpGet("{id}")]
@@ -73,7 +73,7 @@ namespace Shop1.Controllers
             });
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategoryById(int id, [FromBody] RequestCategoryDTO request)
+        public async Task<IActionResult> Update(int id, [FromBody] RequestCategoryDTO request)
         {
             var category = await _shopDbContext.Categories.FirstOrDefaultAsync(x => x.Id == id);
             if (category == null)
